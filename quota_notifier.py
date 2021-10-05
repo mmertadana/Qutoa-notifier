@@ -1,10 +1,17 @@
 from selenium import webdriver
 from pushbullet import PushBullet
-import numpy as np
 import time
+import os
 
 def sleep_minutes(minutes):
     time.sleep(minutes*60)
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.dirname(__file__)
+    return os.path.join(base_path, relative_path)
 
 print ("ITU undergraduate course quota program")
 print ("Program uses Google Chrome as default.\nIt checks increasements every 15 mins.\nWhen capacity of a course is higher than its enrolls it sends a notification to your mobilephone one time.\nProgram has to be active to send notifications.")
@@ -12,8 +19,6 @@ print ("Program uses Google Chrome as default.\nIt checks increasements every 15
 access_token = input("Write your Pushbullet access token: ")
 
 course_code = input ("Write your course code(END, ISL etc.): ")
-
-print (course_code.upper())
 
 courses = int(input("How many courses you want to check: "))
 
@@ -25,7 +30,7 @@ for i in range(courses):
     append_crn = input("Write your {}. CRN: ".format(i+1))
     course_list.append(append_crn)
     
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(resource_path('./driver/chromedriver.exe'))
 
 driver.get("https://www.sis.itu.edu.tr/TR/ogrenci/ders-programi/ders-programi.php?seviye=LS")
 
@@ -35,7 +40,7 @@ while error:
         
         pb = PushBullet(access_token)
 
-        end = driver.find_element_by_xpath ("//*[contains(text(), '{}')]".format (course_code))
+        end = driver.find_element_by_xpath ("//*[contains(text(), '{}')]".format (course_code.upper()))
         end.click()
 
         show = driver.find_element_by_xpath ("/html/body/div/div[2]/div/div[1]/form/input")
@@ -53,5 +58,5 @@ while error:
         sleep_minutes (15)
         driver.refresh()
 
-    except OSError:
+    except IOError:
         error = True
