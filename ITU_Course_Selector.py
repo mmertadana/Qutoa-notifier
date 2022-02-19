@@ -67,8 +67,8 @@ while error:
                     username_path = browser.find_element_by_xpath("//*[@id='ContentPlaceHolder1_tbUserName']")
                     password_path = browser.find_element_by_xpath("//*[@id='ContentPlaceHolder1_tbPassword']")
                     login_path = browser.find_element_by_xpath("//*[@id='ContentPlaceHolder1_btnLogin']")
-                    username.send_keys ("adana18")
-                    password.send_keys ("Mandalina0.")
+                    username.send_keys ("")
+                    password.send_keys ("")
                     login.click()
 
                     
